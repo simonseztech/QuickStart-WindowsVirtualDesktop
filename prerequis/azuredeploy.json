@@ -80,7 +80,7 @@
             }
 
         },
-        "privateIPAddress": {
+        "AdprivateIPAddress": {
             "type": "string",
             "defaultValue": "10.0.0.4",
             "metadata": {
@@ -187,7 +187,7 @@
                         "name": "ipconfig1",
                         "properties": {
                             "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[parameters('privateIPAddress')]",
+                            "privateIPAddress": "[parameters('AdprivateIPAddress')]",
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
                             },
@@ -255,39 +255,88 @@
                 }
             },
             "resources":[
-                {
-                    "type":"extensions",
-                    "apiVersion":"2019-03-01",
-                    "name":"CreateADForest",
-                    "location":"[parameters('location')]",
+                                {
+                    "type": "extensions",
+                    "apiVersion": "2019-03-01",
+                    "name": "CreateADForest",
+                    "location": "[parameters('location')]",
                     "dependsOn": [
                         "[parameters('AdvirtualMachineName')]"
                     ],
-                    "properties":{
+                    "properties": {
                         "publisher": "Microsoft.Powershell",
                         "type": "DSC",
                         "typeHandlerVersion": "2.19",
                         "autoUpgradeMinorVersion": true,
-                        "setting":{
+                        "settings": {
                             "ModulesUrl": "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/prerequis/DSC/CreateADPDC.zip",
                             "ConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-                            "Properties":{
+                            "Properties": {
                                 "DomainName": "[parameters('domainName')]",
                                 "AdminCreds": {
                                     "UserName": "[parameters('adminUsername')]",
-                                    "Password": "[parameters('adminPassword')]"
+                                    "Password": "PrivateSettingsRef:AdminPassword"
                                 }
                             }
                         },
-                        "protectedSettings":{
+                        "protectedSettings": {
                             "Items": {
                                 "AdminPassword": "[parameters('adminPassword')]"
                             }
                         }
                     }
                 }
-            ]
-        }
 
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "UpdateVNetDNS",
+            "dependsOn": [
+                "CreateADForest"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/prerequis/nestedtemplates/vnet.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('virtualNetworkName')]"
+                    },
+                    "virtualNetworkAddressRange": {
+                        "value": "[parameters('virtualNetworkAddressRange')]"
+                    },
+                    "AdSubnetName": {
+                        "value": "[parameters('AdSubnetName')]"
+                    },
+                    "AdSubnetRange": {
+                        "value": "[parameters('AdSubnetRange')]"
+                    },
+                    "HostsSubnetName": {
+                        "value": "[parameters('HostsSubnetName')]"
+                    },
+                    "HostssubnetRange": {
+                        "value": "[parameters('HostssubnetRange')]"
+                    },
+                    "AzureBastionSubnetName": {
+                        "value": "[parameters('AzureBastionSubnetName')]"
+                    },
+                    "AzureBastionSubnetRange": {
+                        "value": "[parameters('AzureBastionSubnetRange')]"
+                    },
+                    "DNSServerAddress": {
+                        "value": [
+                            "[parameters('AdprivateIPAddress')]"
+                        ]
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }            
+        }
     ]
 }
