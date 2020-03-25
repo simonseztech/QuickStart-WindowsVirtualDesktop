@@ -43,6 +43,20 @@
             "metadata": {
                 "description": "Subnet IP range."
             }
+        },
+        "HostsSubnetName":{
+            "type": "string",
+            "defaultValue": "HostsSubnet",
+            "metadata": {
+                "description": "Subnet name."
+            }            
+        },
+        "HostssubnetRange":{
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "Subnet IP range."
+            }
         }
     },
     "resources": [
@@ -77,6 +91,12 @@
                     },
                     "AdSubnetRange": {
                         "value": "[parameters('AdSubnetRange')]"
+                    },
+                    "HostsSubnetName": {
+                        "value": "[parameters('HostsSubnetName')]"
+                    },
+                    "HostssubnetRange": {
+                        "value": "[parameters('HostssubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"

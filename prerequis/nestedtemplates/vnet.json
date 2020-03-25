@@ -26,6 +26,18 @@
                 "description": "The address range of the subnet created in the new VNET"
             }
         },
+        "HostsSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
+        "HostssubnetRange": {
+            "type": "string",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
         "location": {
             "type": "string",
             "metadata": {
@@ -50,6 +62,12 @@
                         "name": "[parameters('AdSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('AdsubnetRange')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('HostsSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('HostssubnetRange')]"
                         }
                     }
 
