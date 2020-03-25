@@ -72,10 +72,10 @@
                     "virtualNetworkAddressRange": {
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
-                    "subnetName": {
+                    "AdSubnetName": {
                         "value": "[parameters('AdSubnetName')]"
                     },
-                    "subnetRange": {
+                    "AdSubnetRange": {
                         "value": "[parameters('AdSubnetRange')]"
                     },
                     "location": {
