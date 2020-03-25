@@ -30,14 +30,14 @@
                 "description": "Virtual network address range."
             }
         },
-        "subnetName": {
+        "AdSubnetName": {
             "type": "string",
             "defaultValue": "adSubnet",
             "metadata": {
                 "description": "Subnet name."
             }
         },
-        "subnetRange": {
+        "AdSubnetRange": {
             "type": "string",
             "defaultValue": "10.0.0.0/24",
             "metadata": {
@@ -62,7 +62,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/Pierre-Chesne/azure/master/prerequis/nestedtemplates/vnet.json",
+                    "uri": "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/prerequis/nestedtemplates/vnet.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -73,10 +73,10 @@
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
                     "subnetName": {
-                        "value": "[parameters('subnetName')]"
+                        "value": "[parameters('AdSubnetName')]"
                     },
                     "subnetRange": {
-                        "value": "[parameters('subnetRange')]"
+                        "value": "[parameters('AdSubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
