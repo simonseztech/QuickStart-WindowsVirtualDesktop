@@ -57,7 +57,25 @@
             "metadata": {
                 "description": "Subnet IP range."
             }
+        },
+        "AzureBastionSubnetName":{
+            "type": "string",
+            "defaultValue": "AzureBastionSubnet",
+            "metadata": {
+                "description": "Subnet name."
+            }  
+        },
+        "AzureBastionSubnetRange":{
+            "type": "string",
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "Subnet IP range."
+            }
         }
+        
+        
+        
+
     },
     "resources": [
         {
@@ -97,6 +115,12 @@
                     },
                     "HostssubnetRange": {
                         "value": "[parameters('HostssubnetRange')]"
+                    },
+                    "AzureBastionSubnetName": {
+                        "value": "[parameters('AzureBastionSubnetName')]"
+                    },
+                    "AzureBastionSubnetRange": {
+                        "value": "[parameters('AzureBastionSubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"

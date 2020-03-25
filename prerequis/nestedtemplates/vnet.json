@@ -38,6 +38,19 @@
                 "description": "The address range of the subnet created in the new VNET"
             }
         },
+        "AzureBastionSubnetName": {
+            "type":"string",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "AzureBastionSubnetRange":{
+            "type":"string",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        }
+
         "location": {
             "type": "string",
             "metadata": {
@@ -68,6 +81,12 @@
                         "name": "[parameters('HostsSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('HostssubnetRange')]"
+                        }
+                    },
+                    {
+                        "name":  "[parameters('AzureBastionSubnetName')]",
+                        "properties" : {
+                            "addressPrefix": "[parameters('AzureBastionSubnetRange')]"
                         }
                     }
 
