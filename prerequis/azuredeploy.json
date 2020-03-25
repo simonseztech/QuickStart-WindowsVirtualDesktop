@@ -71,9 +71,22 @@
             "metadata": {
                 "description": "Subnet IP range."
             }
+        },
+        "AdnetworkInterfaceName":{
+            "type":"string",
+            "defaultValue":"AdNic",
+            "metadata": {
+                "description": "AD Nic Name"
+            }
+
+        },
+        "privateIPAddress":{
+            "type":"string",
+            "defaultValue":"10.0.0.4",
+            "metadata":{
+                "description":"AD Ip address"
+            }
         }
-
-
     },
     "resources": [
         {
@@ -124,6 +137,32 @@
                         "value": "[parameters('location')]"
                     }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion":"2019-02-01",
+            "name": "[parameters('AdnetworkInterfaceName')]",
+            "location": "[parameters('location')]",
+            "dependsOn":[
+                "Vnet"
+            ],
+            "properties":{
+                "ipConfigurations":[
+                    {
+                        "name":"ipconfig1",
+                        "properties":{
+                            "privateIPAllocationMethod":"Static",
+                            "privateIPAddress": "[parameters('privateIPAddress')]",
+                            "subnet":{
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
+                            },
+                            "publicIPAddress":{
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+                            }
+                        }
+                    }
+                ]
             }
         }
 
