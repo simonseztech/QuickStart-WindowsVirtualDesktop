@@ -86,6 +86,33 @@
             "metadata": {
                 "description": "AD Ip address"
             }
+        },
+        "AdvirtualMachineName": {
+            "type": "string",
+            "defaultValue": "VM-AD-0",
+            "metadata": {
+                "description": "VM AD name"
+            }
+        },
+        "AdvmSize": {
+            "type": "string",
+            "defaultValue": "Standard_A2_v2",
+            "metadata": {
+                "description": "Size of the VM for the controller"
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The password for the administrator account of the new VM and domain"
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "pierrc",
+            "metadata": {
+                "description": "The name of the administrator account of the new VM and domain"
+            }
         }
     },
     "resources": [
@@ -163,6 +190,63 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "name": "[parameters('AdvirtualMachineName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[parameters('AdnetworkInterfaceName')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmsize": "[parameters('AdvmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('AdvirtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('AdvirtualMachineName'),'_OSDisk')]",
+                        "caching": "ReadOnly",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    },
+                    "dataDisks": [
+                        {
+                            "name": "[concat(parameters('AdvirtualMachineName'), '_DataDisk')]",
+                            "caching": "ReadWrite",
+                            "createOption": "Empty",
+                            "diskSizeGB": 20,
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS"
+                            },
+                            "lun": 0
+
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('AdnetworkInterfaceName'))]"
+                        }
+                    ]
+                }
+
             }
         }
 
