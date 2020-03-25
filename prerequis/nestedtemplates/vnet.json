@@ -39,18 +39,17 @@
             }
         },
         "AzureBastionSubnetName": {
-            "type":"string",
+            "type": "string",
             "metadata": {
                 "description": "Location for all resources."
             }
         },
-        "AzureBastionSubnetRange":{
-            "type":"string",
+        "AzureBastionSubnetRange": {
+            "type": "string",
             "metadata": {
                 "description": "Location for all resources."
             }
-        }
-
+        },
         "location": {
             "type": "string",
             "metadata": {
@@ -84,8 +83,8 @@
                         }
                     },
                     {
-                        "name":  "[parameters('AzureBastionSubnetName')]",
-                        "properties" : {
+                        "name": "[parameters('AzureBastionSubnetName')]",
+                        "properties": {
                             "addressPrefix": "[parameters('AzureBastionSubnetRange')]"
                         }
                     }

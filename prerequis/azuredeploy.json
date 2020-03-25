@@ -10,7 +10,7 @@
             }
         },
         "publicIPAddressName": {
-            "type":"string",
+            "type": "string",
             "defaultValue": "IpMgt",
             "metadata": {
                 "description": "Nom de l'ip de Mgt"
@@ -44,37 +44,35 @@
                 "description": "Subnet IP range."
             }
         },
-        "HostsSubnetName":{
+        "HostsSubnetName": {
             "type": "string",
             "defaultValue": "HostsSubnet",
             "metadata": {
                 "description": "Subnet name."
-            }            
+            }
         },
-        "HostssubnetRange":{
+        "HostssubnetRange": {
             "type": "string",
             "defaultValue": "10.0.1.0/24",
             "metadata": {
                 "description": "Subnet IP range."
             }
         },
-        "AzureBastionSubnetName":{
+        "AzureBastionSubnetName": {
             "type": "string",
             "defaultValue": "AzureBastionSubnet",
             "metadata": {
                 "description": "Subnet name."
-            }  
+            }
         },
-        "AzureBastionSubnetRange":{
+        "AzureBastionSubnetRange": {
             "type": "string",
             "defaultValue": "10.0.2.0/24",
             "metadata": {
                 "description": "Subnet IP range."
             }
         }
-        
-        
-        
+
 
     },
     "resources": [
