@@ -72,19 +72,19 @@
                 "description": "Subnet IP range."
             }
         },
-        "AdnetworkInterfaceName":{
-            "type":"string",
-            "defaultValue":"AdNic",
+        "AdnetworkInterfaceName": {
+            "type": "string",
+            "defaultValue": "AdNic",
             "metadata": {
                 "description": "AD Nic Name"
             }
 
         },
-        "privateIPAddress":{
-            "type":"string",
-            "defaultValue":"10.0.0.4",
-            "metadata":{
-                "description":"AD Ip address"
+        "privateIPAddress": {
+            "type": "string",
+            "defaultValue": "10.0.0.4",
+            "metadata": {
+                "description": "AD Ip address"
             }
         }
     },
@@ -141,23 +141,23 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion":"2019-02-01",
+            "apiVersion": "2019-02-01",
             "name": "[parameters('AdnetworkInterfaceName')]",
             "location": "[parameters('location')]",
-            "dependsOn":[
+            "dependsOn": [
                 "Vnet"
             ],
-            "properties":{
-                "ipConfigurations":[
+            "properties": {
+                "ipConfigurations": [
                     {
-                        "name":"ipconfig1",
-                        "properties":{
-                            "privateIPAllocationMethod":"Static",
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[parameters('privateIPAddress')]",
-                            "subnet":{
+                            "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
                             },
-                            "publicIPAddress":{
+                            "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
                             }
                         }
