@@ -1,59 +1,95 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "virtualNetworkName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the Virtual Network to Create"
-        }
-      },
-      "virtualNetworkAddressRange": {
-        "type": "string",
-        "metadata": {
-          "description": "The address range of the new VNET in CIDR format"
-        }
-      },
-      "subnetName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the subnet created in the new VNET"
-        }
-      },
-      "subnetRange": {
-        "type": "string",
-        "metadata": {
-          "description": "The address range of the subnet created in the new VNET"
-        }
-      },
-      "location": {
-        "type": "string",
-        "metadata": {
-          "description": "Location for all resources."
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Virtual Network to Create"
       }
     },
-    "resources": [
-      {
-        "type": "Microsoft.Network/virtualNetworks",
-        "name": "[parameters('virtualNetworkName')]",
-        "apiVersion": "2019-02-01",
-        "location": "[parameters('location')]",
-        "properties": {
-          "addressSpace": {
-            "addressPrefixes": [
-              "[parameters('virtualNetworkAddressRange')]"
-            ]
-          },
-          "subnets": [
-            {
-              "name": "[parameters('subnetName')]",
-              "properties": {
-                "addressPrefix": "[parameters('subnetRange')]"
-              }
-            }
-          ]
-        }
+    "virtualNetworkAddressRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the new VNET in CIDR format"
       }
-    ]
-  }
+    },
+    "AdsubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the subnet created in the new VNET"
+      }
+    },
+    "AdsubnetRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the subnet created in the new VNET"
+      }
+    },
+    "HostssubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the subnet created in the new VNET"
+      }
+    },
+    "HostssubnetRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the subnet created in the new VNET"
+      }
+    },
+    "BastionsubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the subnet created in the new VNET"
+      }
+    },
+    "BastionsubnetRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the subnet created in the new VNET"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('virtualNetworkName')]",
+      "apiVersion": "2019-02-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworkAddressRange')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('AdsubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('AdsubnetRange')]"
+            }
+          },
+          {
+            "name": "[parameters('HostssubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('HostssubnetRange')]"
+            }
+          },
+          {
+            "name": "[parameters('BastionsubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('BastionsubnetRange')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

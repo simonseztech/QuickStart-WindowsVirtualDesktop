@@ -4,6 +4,7 @@
     "parameters": {
         "adminUsername": {
             "type": "string",
+            "defaultValue": "pierrc",
             "metadata": {
                 "description": "The name of the administrator account of the new VM and domain"
             }
@@ -16,14 +17,9 @@
         },
         "domainName": {
             "type": "string",
+            "defaultValue": "ma-pme.local",
             "metadata": {
                 "description": "The FQDN of the Active Directory Domain to be created"
-            }
-        },
-        "dnsPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "The DNS prefix for the public IP address used by the Load Balancer"
             }
         },
         "vmSize": {
@@ -62,27 +58,6 @@
                 "description": "Virtual network address range."
             }
         },
-        "loadBalancerFrontEndIPName": {
-            "type": "string",
-            "defaultValue": "LBFE",
-            "metadata": {
-                "description": "Load balancer front end IP address name."
-            }
-        },
-        "backendAddressPoolName": {
-            "type": "string",
-            "defaultValue": "LBBE",
-            "metadata": {
-                "description": "Backend address pool name."
-            }
-        },
-        "inboundNatRulesName": {
-            "type": "string",
-            "defaultValue": "adRDP",
-            "metadata": {
-                "description": "Inbound NAT rules name."
-            }
-        },
         "networkInterfaceName": {
             "type": "string",
             "defaultValue": "adNic",
@@ -97,39 +72,54 @@
                 "description": "Private IP address."
             }
         },
-        "subnetName": {
+        "AdsubnetName": {
             "type": "string",
-            "defaultValue": "adSubnet",
+            "defaultValue": "AdSubnet",
             "metadata": {
                 "description": "Subnet name."
             }
         },
-        "subnetRange": {
+        "AdsubnetRange": {
             "type": "string",
             "defaultValue": "10.0.0.0/24",
             "metadata": {
                 "description": "Subnet IP range."
             }
         },
+        "HostssubnetName": {
+            "type": "string",
+            "defaultValue": "HostsSubnet",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
+        "HostssubnetRange": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
+        "BastionsubnetName": {
+            "type": "string",
+            "defaultValue": "AzureBastionSubnet",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
+        "BastionsubnetRange": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "The address range of the subnet created in the new VNET"
+            }
+        },
+
         "publicIPAddressName": {
             "type": "string",
             "defaultValue": "adPublicIP",
             "metadata": {
                 "description": "Subnet IP range."
-            }
-        },
-        "availabilitySetName": {
-            "type": "string",
-            "defaultValue": "adAvailabiltySet",
-            "metadata": {
-                "description": "Availability set name."
-            }
-        },
-        "loadBalancerName": {
-            "type": "string",
-            "defaultValue": "adLoadBalancer",
-            "metadata": {
-                "description": "Load balancer name."
             }
         }
     },
@@ -140,23 +130,7 @@
             "name": "[parameters('publicIPAddressName')]",
             "location": "[parameters('location')]",
             "properties": {
-                "publicIPAllocationMethod": "Static",
-                "dnsSettings": {
-                    "domainNameLabel": "[parameters('dnsPrefix')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "2019-03-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('availabilitySetName')]",
-            "properties": {
-                "PlatformUpdateDomainCount": 20,
-                "PlatformFaultDomainCount": 2
-            },
-            "sku": {
-                "name": "Aligned"
+                "publicIPAllocationMethod": "Static"
             }
         },
         {
@@ -176,11 +150,23 @@
                     "virtualNetworkAddressRange": {
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
+                    "AdsubnetName": {
+                        "value": "[parameters('AdsubnetName')]"
                     },
-                    "subnetRange": {
-                        "value": "[parameters('subnetRange')]"
+                    "AdsubnetRange": {
+                        "value": "[parameters('AdsubnetRange')]"
+                    },
+                    "HostssubnetName": {
+                        "value": "[parameters('HostssubnetName')]"
+                    },
+                    "HostssubnetRange": {
+                        "value": "[parameters('HostssubnetRange')]"
+                    },
+                    "BastionsubnetName": {
+                        "value": "[parameters('BastionsubnetName')]"
+                    },
+                    "BastionsubnetRange": {
+                        "value": "[parameters('BastionsubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
@@ -189,53 +175,12 @@
             }
         },
         {
-            "type": "Microsoft.Network/loadBalancers",
-            "apiVersion": "2019-02-01",
-            "name": "[parameters('loadBalancerName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[parameters('publicIPAddressName')]"
-            ],
-            "properties": {
-                "frontendIPConfigurations": [
-                    {
-                        "name": "[parameters('loadBalancerFrontEndIPName')]",
-                        "properties": {
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
-                            }
-                        }
-                    }
-                ],
-                "backendAddressPools": [
-                    {
-                        "name": "[parameters('backendAddressPoolName')]"
-                    }
-                ],
-                "inboundNatRules": [
-                    {
-                        "name": "[parameters('inboundNatRulesName')]",
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', parameters('loadBalancerName'), parameters('loadBalancerFrontEndIPName'))]"
-                            },
-                            "protocol": "Tcp",
-                            "frontendPort": 3389,
-                            "backendPort": 3389,
-                            "enableFloatingIP": false
-                        }
-                    }
-                ]
-            }
-        },
-        {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-02-01",
             "name": "[parameters('networkInterfaceName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "VNet",
-                "[parameters('loadBalancerName')]"
+                "VNet"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -245,18 +190,11 @@
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[parameters('privateIPAddress')]",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
                             },
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancerName'), parameters('backendAddressPoolName'))]"
-                                }
-                            ],
-                            "loadBalancerInboundNatRules": [
-                                {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatRules', parameters('loadBalancerName'), parameters('inboundNatRulesName'))]"
-                                }
-                            ]
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+                            }
                         }
                     }
                 ]
@@ -268,16 +206,11 @@
             "name": "[parameters('virtualMachineName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[parameters('networkInterfaceName')]",
-                "[parameters('availabilitySetName')]",
-                "[parameters('loadBalancerName')]"
+                "[parameters('networkInterfaceName')]"
             ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
-                },
-                "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
                 },
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineName')]",
@@ -317,6 +250,7 @@
                         {
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
                         }
+
                     ]
                 }
             },
@@ -374,11 +308,23 @@
                     "virtualNetworkAddressRange": {
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
+                    "AdsubnetName": {
+                        "value": "[parameters('AdsubnetName')]"
                     },
-                    "subnetRange": {
-                        "value": "[parameters('subnetRange')]"
+                    "AdsubnetRange": {
+                        "value": "[parameters('AdsubnetRange')]"
+                    },
+                    "HostssubnetName": {
+                        "value": "[parameters('HostssubnetName')]"
+                    },
+                    "HostssubnetRange": {
+                        "value": "[parameters('HostssubnetRange')]"
+                    },
+                    "BastionsubnetName": {
+                        "value": "[parameters('BastionsubnetName')]"
+                    },
+                    "BastionsubnetRange": {
+                        "value": "[parameters('BastionsubnetRange')]"
                     },
                     "DNSServerAddress": {
                         "value": [
