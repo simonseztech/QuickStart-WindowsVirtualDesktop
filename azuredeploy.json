@@ -29,7 +29,6 @@
                 "description": "Size of the VM for the controller"
             }
         },
-
         "location": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
@@ -37,16 +36,16 @@
                 "description": "Location for all resources."
             }
         },
-        "virtualMachineName": {
+        "AdvirtualMachineName": {
             "type": "string",
-            "defaultValue": "adVM",
+            "defaultValue": "VM-AD-0",
             "metadata": {
                 "description": "Virtual machine name."
             }
         },
         "virtualNetworkName": {
             "type": "string",
-            "defaultValue": "adVNET",
+            "defaultValue": "WVD-VNET",
             "metadata": {
                 "description": "Virtual network name."
             }
@@ -58,7 +57,14 @@
                 "description": "Virtual network address range."
             }
         },
-        "networkInterfaceName": {
+        "AdnetworkInterfaceName": {
+            "type": "string",
+            "defaultValue": "adNic",
+            "metadata": {
+                "description": "Network interface name."
+            }
+        },
+        "AdConnectnetworkInterfaceName":{
             "type": "string",
             "defaultValue": "adNic",
             "metadata": {
@@ -74,7 +80,7 @@
         },
         "AdsubnetName": {
             "type": "string",
-            "defaultValue": "AdSubnet",
+            "defaultValue": "Ad-Subnet",
             "metadata": {
                 "description": "Subnet name."
             }
@@ -88,7 +94,7 @@
         },
         "HostssubnetName": {
             "type": "string",
-            "defaultValue": "HostsSubnet",
+            "defaultValue": "Hosts-Subnet",
             "metadata": {
                 "description": "The address range of the subnet created in the new VNET"
             }
@@ -114,7 +120,6 @@
                 "description": "The address range of the subnet created in the new VNET"
             }
         },
-
         "publicIPAddressName": {
             "type": "string",
             "defaultValue": "adPublicIP",
@@ -177,7 +182,30 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-02-01",
-            "name": "[parameters('networkInterfaceName')]",
+            "name": "[parameters('AdnetworkInterfaceName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "VNet"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[parameters('privateIPAddress')]",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+                {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2019-02-01",
+            "name": "[parameters('AdConnectnetworkInterfaceName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "VNet"
@@ -200,20 +228,21 @@
                 ]
             }
         },
+
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
-            "name": "[parameters('virtualMachineName')]",
+            "name": "[parameters('AdvirtualMachineName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[parameters('networkInterfaceName')]"
+                "[parameters('AdnetworkInterfaceName')]"
             ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachineName')]",
+                    "computerName": "[parameters('AdvirtualMachineName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -225,7 +254,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "[concat(parameters('virtualMachineName'),'_OSDisk')]",
+                        "name": "[concat(parameters('AdvirtualMachineName'),'_OSDisk')]",
                         "caching": "ReadOnly",
                         "createOption": "FromImage",
                         "managedDisk": {
@@ -234,7 +263,7 @@
                     },
                     "dataDisks": [
                         {
-                            "name": "[concat(parameters('virtualMachineName'), '_DataDisk')]",
+                            "name": "[concat(parameters('AdvirtualMachineName'), '_DataDisk')]",
                             "caching": "ReadWrite",
                             "createOption": "Empty",
                             "diskSizeGB": 20,
@@ -248,9 +277,8 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('AdnetworkInterfaceName'))]"
                         }
-
                     ]
                 }
             },
@@ -261,7 +289,7 @@
                     "name": "CreateADForest",
                     "location": "[parameters('location')]",
                     "dependsOn": [
-                        "[parameters('virtualMachineName')]"
+                        "[parameters('AdvirtualMachineName')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
