@@ -147,6 +147,28 @@
             "metadata": {
                 "description": "Subnet IP range."
             }
+        },
+        "ouUsers": {
+            "type":"string",
+            "defaultValue":"WVD-Users",
+            "metadata":{
+                "description": "OU name"
+            }
+        },
+        "ouHosts": {
+            "type":"string",
+            "defaultValue":"WVD-Hosts",
+            "metadata":{
+                "description": "OU name"
+            }
+
+        },
+        "bastion-host-name":{
+            "type":"string",
+            "defaultValue":"WVD-Bastion",
+            "metadata":{
+                "description":"Bastion Name"
+            }
         }
     },
     "resources": [
@@ -155,8 +177,11 @@
             "apiVersion": "2019-02-01",
             "name": "[parameters('publicIPAddressName')]",
             "location": "[parameters('location')]",
+            "sku":{
+                "name":"Standard"
+            },
             "properties": {
-                "publicIPAllocationMethod": "Static"
+                "publicIPAllocationMethod": "Static"                
             }
         },
         {
@@ -240,9 +265,6 @@
                             "privateIPAddress": "[parameters('AdConnectprivateIPAddress')]",
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('AdsubnetName'))]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
                             }
                         }
                     }
@@ -386,6 +408,54 @@
             }
         },
         {
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion":"2019-04-01",
+            "name":"[parameters('bastion-host-name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "UpdateVNetDNS",
+                "[parameters('publicIPAddressName')]"
+            ],
+            "properties":{
+                "ipConfigurations":[
+                    {
+                        "name":"IpConf",
+                        "properties":{
+                            "subnet":{
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('BastionsubnetName'))]"
+                            },
+                            "publicIPAddress":{
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIPAddressName'))]"
+                            }
+                        }
+                    }
+                ]
+            }            
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(parameters('AdvirtualMachineName'), '/OU')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "UpdateVNetDNS"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/Prerequis/AzureAdConnect/ou.ps1"
+                    ],                    
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ou.ps1', ' -ouUsers ', '\"' , parameters('ouUsers') , '\"', ' -ouHosts ', '\"' , parameters('ouHosts') , '\"') ]"                  
+                },
+                "protectedSettings": {
+                }
+            }
+        },
+        {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
             "name": "[parameters('AdConnectvirtualMachineName')]",
@@ -454,7 +524,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
-            "name": "[concat(parameters('AdConnectvirtualMachineName'), '/CustomScriptExtension')]",
+            "name": "[concat(parameters('AdConnectvirtualMachineName'), '/AdConnect')]",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('AdConnectvirtualMachineName'),'/extensions/joindomain')]"
@@ -468,7 +538,8 @@
                     "fileUris": [
                         "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/Prerequis/AzureAdConnect/Installation.ps1"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File Installation.ps1')]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File Installation.ps1')]"                 
+                    
                 },
                 "protectedSettings": {
                 }
