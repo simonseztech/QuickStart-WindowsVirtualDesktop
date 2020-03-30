@@ -450,6 +450,29 @@
                     "Password": "[parameters('adminPassword')]"
                 }
             }
+        },
+                {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(parameters('AdConnectvirtualMachineName'), '/CustomScriptExtension')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat(parameters('AdConnectvirtualMachineName'),'/joindomain')]"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/AzureAdConnect/Installation.ps1"
+                    ],
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File Installation.ps1')]"
+                },
+                "protectedSettings": {
+                }
+            }
         }
     ]
 }

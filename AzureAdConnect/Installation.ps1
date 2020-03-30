@@ -1,0 +1,2 @@
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-WindowsVirtualDesktop/master/AzureAdConnect/AzureADConnect.msi" -Destination "C:\Windows\Temp\AzureADConnect.msi"
+C:\Windows\Temp\AzureADConnect.msi /quiet
