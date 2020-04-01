@@ -33,21 +33,21 @@
             "type": "string",
             "defaultValue": "WVD-Users",
             "metadata": {
-                "description": "OU name"
+                "description": "OU Users WVD name"
             }
         },
         "ouHosts": {
             "type": "string",
             "defaultValue": "WVD-Hosts",
             "metadata": {
-                "description": "OU name"
+                "description": "OU Hosts WVD name"
             }
         },
         "AdvirtualMachineName": {
             "type": "string",
             "defaultValue": "VM-AD-0",
             "metadata": {
-                "description": "Virtual machine name."
+                "description": "Virtual machine name for AD."
             }
         },
         "AdvmSize": {
@@ -61,14 +61,14 @@
             "type": "string",
             "defaultValue": "Ad-Nic",
             "metadata": {
-                "description": "Network interface name."
+                "description": "Network interface name for AD."
             }
         },
         "AdprivateIPAddress": {
             "type": "string",
             "defaultValue": "10.0.0.4",
             "metadata": {
-                "description": "Private IP address."
+                "description": "Private IP address for AD."
             }
         },
         "AdConnectvirtualMachineName": {
