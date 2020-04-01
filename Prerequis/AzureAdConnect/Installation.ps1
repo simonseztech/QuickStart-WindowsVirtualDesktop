@@ -2,4 +2,4 @@ $SrcAdConnect = "https://raw.githubusercontent.com/Pierre-Chesne/QuickStart-Wind
 $location = "C:\Windows\Temp\AzureADConnect.msi"
 
 Start-BitsTransfer -Source $SrcAdConnect -Destination $location
-#C:\Windows\Temp\AzureADConnect.msi /quiet
+C:\Windows\Temp\AzureADConnect.msi /quiet
