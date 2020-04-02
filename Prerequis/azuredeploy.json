@@ -75,56 +75,56 @@
             "type": "string",
             "defaultValue": "VM-AD-Connect",
             "metadata": {
-                "description": "Virtual machine name."
+                "description": "Virtual machine name for AD Connect."
             }
         },
         "AdConnectvmSize": {
             "type": "string",
             "defaultValue": "Standard_D2s_v3",
             "metadata": {
-                "description": "Virtual machine name."
+                "description": "Virtual machine name for AD Connect."
             }
         },
         "AdConnectnetworkInterfaceName": {
             "type": "string",
             "defaultValue": "AdConnect-Nic",
             "metadata": {
-                "description": "Network interface name."
+                "description": "Network interface name for AD Connect."
             }
         },
         "AdConnectprivateIPAddress": {
             "type": "string",
             "defaultValue": "10.0.0.5",
             "metadata": {
-                "description": "Private IP address."
+                "description": "Private IP address for AD Connect."
             }
         },
         "ProfilstvirtualMachineName":{
             "type": "string",
             "defaultValue": "VM-Profils",
             "metadata": {
-                "description": "Virtual machine name."
+                "description": "Virtual machine name for VM profils."
             }
         },
         "ProfilsvmSize":{
             "type": "string",
             "defaultValue": "Standard_D2s_v3",
             "metadata": {
-                "description": "Virtual machine name."
+                "description": "Virtual machine name for VM profils."
             }
         },
         "ProfilsnetworkInterfaceName":{
             "type": "string",
             "defaultValue": "Profil-Nic",
             "metadata": {
-                "description": "Network interface name."
+                "description": "Network interface name for VM profils."
             }
         },
         "ProfilsprivateIPAddress":{
             "type": "string",
             "defaultValue": "10.0.0.6",
             "metadata": {
-                "description": "Private IP address."
+                "description": "Private IP address for VM profils."
             }
 
         },
