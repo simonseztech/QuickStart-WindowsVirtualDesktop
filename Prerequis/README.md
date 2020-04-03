@@ -1,4 +1,4 @@
-# 3 VM Windows Server (un controleur et deux seveurs membres)
+# 3 VM Windows Server (un controleur AD DS et deux seveurs membres)
 
 **Prerequis pour Windows Virtual Desktop:**</br>
 
