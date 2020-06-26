@@ -31,8 +31,7 @@ $workspaceName = "Workspace-PS" # Nom du workspace
 $dagName = "Host-Pool-PS-DAG" # Nom du Desktop Application Group 
 $typePool = "Pooled" # Type de pool Pooled | Personal
 $typeLB = "BreadthFirst" # Type de Load Balanceur BreathFirst | DepthFirst
-#$idGroupAzureAD = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # ID Goupe Azure AD
-$idGroupAzureAD = "f30f2d97-e7f1-43a6-b824-22fcce5a1f0e" # ID Goupe Azure AD
+$idGroupAzureAD = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # ID Goupe Azure AD
 
 # Variables VM (host)
 $vmAdminUsername = Read-Host "Compte admin local de la VM" # Compte Admin local de la vm
