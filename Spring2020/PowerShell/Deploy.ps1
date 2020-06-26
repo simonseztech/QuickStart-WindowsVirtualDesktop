@@ -48,8 +48,8 @@ $azureVmOffer = "office-365" # Offer
 $azureVmSkus = "19h2-evd-o365pp" # Windows 10 Multi-User Office 365
 
 # Variable ajout de la VM dans l'AD
-$domainAD = Read-Host "nom du domaine Active Directory (ex: ma-pme.loal)" # nom du domaine Active Directory
-$vmAdminUsernameAD = Read-Host "Compte Utilisateur de l'Active Directory (ex: user@ma-pme.loal)" # Compte Active Directory ayant le droit de créer un compte machine dans l'Active Directory (Windows Server)
+$domainAD = Read-Host "Nom du domaine Active Directory (ex: ma-pme.loal)" # nom du domaine Active Directory
+$vmAdminUsernameAD = Read-Host "Compte Utilisateur de l'Active Directory ayant les droits d'ajouter un compte ordinateur dans le domaine AD (ex: user@ma-pme.loal)" # Compte Active Directory ayant le droit de créer un compte machine dans l'Active Directory (Windows Server)
 $vmAdminPasswordAD = Read-Host "Password" -AsSecureString
 
 # Variables Installation des agents
