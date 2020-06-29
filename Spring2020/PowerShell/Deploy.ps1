@@ -9,6 +9,8 @@
 # - Ajout de la VM dans Active Directory                                     #
 # - Ajout de la VM en session host dans le Host pool (PowerShell DSC)        # 
 #                                                                            #
+# Rérequis :                                                                 #
+# Vnet existant avec un controleur de domaine joignable                      #
 # Auteurs Pascal Sauliere et Pierre Chesne                                   # 
 ##############################################################################
 
